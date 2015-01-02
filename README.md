@@ -2,9 +2,9 @@
 
 > **[BIG BROTHER](http://en.wikipedia.org/wiki/Big_Brother_(Nineteen_Eighty-Four)) IS WATCHING YOU**. 
 
-BigBrother is a Swift library made for iOS that automatically watches for any requests performed and set the [network activity indicator](https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/MobileHIG/Controls.html#//apple_ref/doc/uid/TP40006556-CH15-SW44).
+BigBrother is a Swift library made for iOS that automatically watches for any performed request and sets the [network activity indicator](https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/MobileHIG/Controls.html#//apple_ref/doc/uid/TP40006556-CH15-SW44).
 
-It was inspired by [this](https://github.com/Alamofire/Alamofire/issues/185#issuecomment-64955006) comment by [Mattt Thompson](https://github.com/mattt).
+It was inspired by [this comment](https://github.com/Alamofire/Alamofire/issues/185#issuecomment-64955006) by [Mattt Thompson](https://github.com/mattt).
 
 It also was based on [this tutorial](http://www.raywenderlich.com/76735/using-nsurlprotocol-swift) for creating an `NSURLProtocol` and on [`AFNetworkActivityIndicatorManager`](https://github.com/AFNetworking/AFNetworking/blob/master/UIKit%2BAFNetworking/AFNetworkActivityIndicatorManager.h) from [AFNetworking](https://github.com/AFNetworking/AFNetworking).
 
