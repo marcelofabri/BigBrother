@@ -5,3 +5,4 @@ before_install:
 script:
 - set -o pipefail
 - xcodebuild -project BigBrother.xcodeproj -scheme BigBrother test | xcpretty -c
+- pod lib lint --quick
