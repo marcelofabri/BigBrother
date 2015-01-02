@@ -1,5 +1,7 @@
 # BigBrother
 
+[![Build Status](https://travis-ci.org/marcelofabri/BigBrother.svg)](https://travis-ci.org/marcelofabri/BigBrother)
+
 > **[BIG BROTHER](http://en.wikipedia.org/wiki/Big_Brother_(Nineteen_Eighty-Four)) IS WATCHING YOU**. 
 
 BigBrother is a Swift library made for iOS that automatically watches for any performed request and sets the [network activity indicator](https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/MobileHIG/Controls.html#//apple_ref/doc/uid/TP40006556-CH15-SW44).
