@@ -1,6 +1,6 @@
 //
-//  NetworkActivityIndicatorManager.swift
-//  speakerdeckapp
+//  Manager.swift
+//  BigBrother
 //
 //  Created by Marcelo Fabri on 01/01/15.
 //  Copyright (c) 2015 Marcelo Fabri. All rights reserved.
@@ -10,21 +10,15 @@ import Foundation
 import UIKit
 
 /**
-    Runs a closure in a synchronized way
-
-    :param: lock    The object to be used to synchronize
-    :param: closure The closure that will be run in a synchronized way
+*  A protocol that represents an object that can manage a network activity indicator.
 */
-private func synchronized(lock: AnyObject, closure: @autoclosure () -> ()) {
-    objc_sync_enter(lock)
-    closure()
-    objc_sync_exit(lock)
-}
-
 @objc public protocol NetworkActivityIndicatorOwner {
     var networkActivityIndicatorVisible: Bool { get set }
 }
 
+/**
+*  UIApplication already conforms to NetworkActivityIndicatorOwner.
+*/
 extension UIApplication : NetworkActivityIndicatorOwner {}
 
 /**
@@ -49,6 +43,7 @@ public class Manager {
     private var activityIndicatorVisibilityTimer: NSTimer?
     private let invisibilityDelay: NSTimeInterval = 0.17
     
+    /// The responsible for owning the network activity indicator. Defaults to UIApplication.sharedApplication().
     public let application: NetworkActivityIndicatorOwner
     
     /// Indicates whether the network activity indicator is visible.
@@ -56,6 +51,13 @@ public class Manager {
         return activityCount > 0
     }
     
+    /**
+        Inits a manager.
+    
+        :param: application The responsible for owning the network activity indicator. If omitted, defaults to UIApplication.sharedApplication().
+    
+        :returns: An initializated manager
+    */
     public init(application: NetworkActivityIndicatorOwner = UIApplication.sharedApplication()){
         self.application = application
     }
@@ -109,4 +111,16 @@ public class Manager {
             }
         }
     }
+}
+
+/**
+    Runs a closure in a synchronized way.
+
+    :param: lock    The object to be used to synchronize
+    :param: closure The closure that will be run in a synchronized way
+*/
+private func synchronized(lock: AnyObject, closure: @autoclosure () -> ()) {
+    objc_sync_enter(lock)
+    closure()
+    objc_sync_exit(lock)
 }

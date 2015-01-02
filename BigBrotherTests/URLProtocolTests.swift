@@ -11,38 +11,6 @@ import XCTest
 import BigBrother
 import ObjectiveC
 
-private var registeredClassesKey: UInt8 = 0
-
-extension NSURLProtocol {
-    
-    class var registeredClasses: NSMutableArray {
-        get {
-            var result = objc_getAssociatedObject(self, &registeredClassesKey) as? NSMutableArray
-            if result == nil {
-                result = NSMutableArray()
-                self.registeredClasses = result!
-            }
-        
-            return result!
-        }
-        set(newValue) {
-            objc_setAssociatedObject(self, &registeredClassesKey, newValue, UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
-        }
-    }
-    
-    class func bb_registerClass(protocolClass: AnyClass) -> Bool {
-        registeredClasses.addObject(protocolClass)
-        
-        return bb_registerClass(protocolClass)
-    }
-    
-    class func bb_unregisterClass(protocolClass: AnyClass) {
-        registeredClasses.removeObject(protocolClass)
-        
-        bb_unregisterClass(protocolClass)
-    }
-}
-
 class URLProtocolTests: XCTestCase {
     
     var swizzledMethods: [(Method, Method)] = []
@@ -140,5 +108,37 @@ class URLProtocolTests: XCTestCase {
         XCTAssertEqual(numberOfProtocols, previousNumberOfProtocols - 1)
         
         XCTAssertFalse(contains(NSURLProtocol.registeredClasses) { $0 === BigBrother.URLProtocol.self } )
+    }
+}
+
+private var registeredClassesKey: UInt8 = 0
+
+extension NSURLProtocol {
+    
+    class var registeredClasses: NSMutableArray {
+        get {
+        var result = objc_getAssociatedObject(self, &registeredClassesKey) as? NSMutableArray
+        if result == nil {
+        result = NSMutableArray()
+        self.registeredClasses = result!
+        }
+        
+        return result!
+        }
+        set(newValue) {
+            objc_setAssociatedObject(self, &registeredClassesKey, newValue, UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
+        }
+    }
+    
+    class func bb_registerClass(protocolClass: AnyClass) -> Bool {
+        registeredClasses.addObject(protocolClass)
+        
+        return bb_registerClass(protocolClass)
+    }
+    
+    class func bb_unregisterClass(protocolClass: AnyClass) {
+        registeredClasses.removeObject(protocolClass)
+        
+        bb_unregisterClass(protocolClass)
     }
 }

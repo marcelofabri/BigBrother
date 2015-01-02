@@ -10,19 +10,6 @@ import UIKit
 import XCTest
 import BigBrother
 
-class MockApplication: NetworkActivityIndicatorOwner {
-    var networkActivityIndicatorVisible = false
-}
-
-func delay(delay:Double, closure:()->()) {
-    dispatch_after(
-        dispatch_time(
-            DISPATCH_TIME_NOW,
-            Int64(delay * Double(NSEC_PER_SEC))
-        ),
-        dispatch_get_main_queue(), closure)
-}
-
 class BigBrotherTests: XCTestCase {
 
     let mockApplication: NetworkActivityIndicatorOwner = MockApplication()
@@ -77,4 +64,17 @@ class BigBrotherTests: XCTestCase {
         let URL =  NSURL(string: "http://httpbin.org/status/500")!
         testThatNetworkActivityIndicationTurnsOffWithURL(URL)
     }
+}
+
+private class MockApplication: NetworkActivityIndicatorOwner {
+    var networkActivityIndicatorVisible = false
+}
+
+private func delay(delay:Double, closure:()->()) {
+    dispatch_after(
+        dispatch_time(
+            DISPATCH_TIME_NOW,
+            Int64(delay * Double(NSEC_PER_SEC))
+        ),
+        dispatch_get_main_queue(), closure)
 }

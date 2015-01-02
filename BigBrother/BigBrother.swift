@@ -1,6 +1,6 @@
 //
-//  NetworkActivityIndicatorManagerURLProtocol.swift
-//  speakerdeckapp
+//  BigBrother.swift
+//  BigBrother
 //
 //  Created by Marcelo Fabri on 01/01/15.
 //  Copyright (c) 2015 Marcelo Fabri. All rights reserved.
@@ -10,14 +10,14 @@ import Foundation
 import UIKit
 
 /**
-    Registers BigBrother to the shared NSURLSession (and to NSURLConnection)
+    Registers BigBrother to the shared NSURLSession (and to NSURLConnection).
 */
 public func addToSharedSession() {
     NSURLProtocol.registerClass(BigBrother.URLProtocol.self)
 }
 
 /**
-    Adds BigBrother to a NSURLSessionConfiguration that will be used to create a custom NSURLSession
+    Adds BigBrother to a NSURLSessionConfiguration that will be used to create a custom NSURLSession.
 
     :param: configuration The configuration on which BigBrother will be added
 */
@@ -27,7 +27,7 @@ public func addToSessionConfiguration(configuration: NSURLSessionConfiguration) 
 }
 
 /**
-    Removes BigBrother from the shared NSURLSession (and to NSURLConnection)
+    Removes BigBrother from the shared NSURLSession (and to NSURLConnection).
 */
 public func removeFromSharedSession() {
     NSURLProtocol.unregisterClass(BigBrother.URLProtocol.self)
@@ -35,7 +35,7 @@ public func removeFromSharedSession() {
 
 /**
     Removes BigBrother from a NSURLSessionConfiguration.
-    Remember to create a new NSURLSession from the updated configuration.
+    You must create a new NSURLSession from the updated configuration to stop using BigBrother.
 
     :param: configuration The configuration from which BigBrother will be removed (if present)
 */
@@ -44,7 +44,7 @@ public func removeFromSessionConfiguration(configuration: NSURLSessionConfigurat
 }
 
 /**
-*  A custom NSURLProtocol that automatically manages UIApplication.sharedApplication().networkActivityIndicatorVisible
+*  A custom NSURLProtocol that automatically manages UIApplication.sharedApplication().networkActivityIndicatorVisible.
 */
 public class URLProtocol : NSURLProtocol {
     
@@ -65,6 +65,8 @@ public class URLProtocol : NSURLProtocol {
             Singleton.instance = newValue
         }
     }
+    
+    // MARK: NSURLProtocol
     
     override public class func canInitWithRequest(request: NSURLRequest) -> Bool {
         if NSURLProtocol.propertyForKey(NSStringFromClass(self), inRequest: request) != nil {
