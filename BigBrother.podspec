@@ -1,7 +1,7 @@
 Pod::Spec.new do |spec|
   spec.name = 'BigBrother'
   spec.version = '0.1.0'
-  spec.summary = 'Automatically sets the network activity indicator watches for any performed requests'
+  spec.summary = 'Automatically sets the network activity indicator watches for any performed requests.'
   spec.homepage = 'https://github.com/marcelofabri/BigBrother'
   spec.license = 'MIT'
   spec.author = { 'Marcelo Fabri' => 'me@marcelofabri.com' }
