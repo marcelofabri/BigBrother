@@ -44,7 +44,7 @@ BigBrother.removeFromSessionConfiguration(configuration)
 let newSession = NSURLSession(configuration: configuration)
 ```
 
-> [**REMAINDER**](https://developer.apple.com/library/mac/documentation/Foundation/Reference/NSURLSessionConfiguration_class/)
+> [**REMINDER**](https://developer.apple.com/library/mac/documentation/Foundation/Reference/NSURLSessionConfiguration_class/)
 > 
 > It is important to configure your NSURLSessionConfiguration object appropriately before using it to initialize a session object. Session objects make a copy of the configuration settings you provide and use those settings to configure the session. Once configured, the session object ignores any changes you make to the NSURLSessionConfiguration object. If you need to modify your transfer policies, you must update the session configuration object and use it to create a new NSURLSession object.
 
