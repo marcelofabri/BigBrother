@@ -1,5 +1,6 @@
 # BigBrother
 
+[![Version](https://cocoapod-badges.herokuapp.com/v/BigBrother/badge.png)](http://cocoadocs.org/docsets/BigBrother) [![Platform](https://cocoapod-badges.herokuapp.com/p/BigBrother/badge.png)](http://cocoadocs.org/docsets/BigBrother)
 [![Build Status](https://travis-ci.org/marcelofabri/BigBrother.svg)](https://travis-ci.org/marcelofabri/BigBrother)
 
 > **[BIG BROTHER](http://en.wikipedia.org/wiki/Big_Brother_(Nineteen_Eighty-Four)) IS WATCHING YOU**. 
