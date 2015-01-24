@@ -64,6 +64,48 @@ class BigBrotherTests: XCTestCase {
         let URL =  NSURL(string: "http://httpbin.org/status/500")!
         testThatNetworkActivityIndicationTurnsOffWithURL(URL)
     }
+    
+    func testThatNetworkActivityIndicationTurnsOffWithBasicAuthentication() {
+        class AuthURLSessionDelegate: NSObject, NSURLSessionTaskDelegate {
+            func URLSession(session: NSURLSession, task: NSURLSessionTask, didReceiveChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential!) -> Void) {
+                let credential = NSURLCredential(user: "u", password: "p", persistence: .ForSession)
+                println("delegate")
+                completionHandler(.UseCredential, credential)
+            }
+        }
+        
+        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+        
+        BigBrother.addToSessionConfiguration(configuration)
+        
+        let delegate = AuthURLSessionDelegate()
+        let session = NSURLSession(configuration: configuration, delegate: delegate, delegateQueue: NSOperationQueue.mainQueue())
+        
+        let URL = NSURL(string: "http://httpbin.org/basic-auth/u/p")!
+        let expectation = expectationWithDescription("GET \(URL)")
+        
+        let task = session.dataTaskWithURL(URL) { (data, response, error) in
+            let httpResponse = response as NSHTTPURLResponse
+            XCTAssertEqual(httpResponse.statusCode, 200)
+            
+            delay(0.2) {
+                expectation.fulfill()
+                XCTAssertFalse(self.mockApplication.networkActivityIndicatorVisible)
+            }
+        }
+        
+        task.resume()
+        
+        let invisibilityDelayExpectation = expectationWithDescription("TurnOnInvisibilityDelayExpectation")
+        delay(0.2) {
+            invisibilityDelayExpectation.fulfill()
+            XCTAssertTrue(self.mockApplication.networkActivityIndicatorVisible)
+        }
+        
+        waitForExpectationsWithTimeout(task.originalRequest.timeoutInterval + 1) { (error) in
+            task.cancel()
+        }
+    }
 }
 
 private class MockApplication: NetworkActivityIndicatorOwner {

@@ -46,7 +46,7 @@ public func removeFromSessionConfiguration(configuration: NSURLSessionConfigurat
 /**
 *  A custom NSURLProtocol that automatically manages UIApplication.sharedApplication().networkActivityIndicatorVisible.
 */
-public class URLProtocol : NSURLProtocol {
+public class URLProtocol : NSURLProtocol, NSURLConnectionDataDelegate {
     
     var connection: NSURLConnection?
     var mutableData: NSMutableData?
@@ -120,5 +120,11 @@ public class URLProtocol : NSURLProtocol {
     
     func connection(connection: NSURLConnection!, didFailWithError error: NSError!) {
         client?.URLProtocol(self, didFailWithError: error)
+    }
+    
+    public func connection(connection: NSURLConnection, willSendRequestForAuthenticationChallenge challenge: NSURLAuthenticationChallenge) {
+        println("before")
+        client?.URLProtocol(self, didReceiveAuthenticationChallenge: challenge)
+        println("after")        
     }
 }
