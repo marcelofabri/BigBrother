@@ -1,5 +1,9 @@
 language: objective-c
 osx_image: xcode61
+# blacklist
+branches:
+  except:
+    - auth
 before_install:
 - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
 script:
