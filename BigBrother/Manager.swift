@@ -12,14 +12,14 @@ import UIKit
 /**
 *  A protocol that represents an object that can manage a network activity indicator.
 */
-@objc public protocol NetworkActivityIndicatorOwner {
+public protocol NetworkActivityIndicatorOwner {
     var networkActivityIndicatorVisible: Bool { get set }
 }
 
 /**
 *  UIApplication already conforms to NetworkActivityIndicatorOwner.
 */
-extension UIApplication : NetworkActivityIndicatorOwner {}
+extension UIApplication: NetworkActivityIndicatorOwner {}
 
 /**
    Manages manages the state of the network activity indicator in the status bar.
@@ -44,7 +44,7 @@ public class Manager {
     private let invisibilityDelay: NSTimeInterval = 0.17
     
     /// The responsible for owning the network activity indicator. Defaults to UIApplication.sharedApplication().
-    public let application: NetworkActivityIndicatorOwner
+    public var application: NetworkActivityIndicatorOwner
     
     /// Indicates whether the network activity indicator is visible.
     public var networkActivityIndicatorVisible: Bool {
@@ -119,7 +119,7 @@ public class Manager {
     :param: lock    The object to be used to synchronize
     :param: closure The closure that will be run in a synchronized way
 */
-private func synchronized(lock: AnyObject, closure: @autoclosure () -> ()) {
+private func synchronized(lock: AnyObject, @autoclosure closure: () -> ()) {
     objc_sync_enter(lock)
     closure()
     objc_sync_exit(lock)
