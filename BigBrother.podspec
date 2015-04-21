@@ -9,4 +9,6 @@ Pod::Spec.new do |spec|
   spec.source = { :git => 'https://github.com/marcelofabri/BigBrother.git', :tag => "#{spec.version}" }
   spec.source_files = 'BigBrother/*.swift'
   spec.requires_arc = true
+  
+  spec.ios.deployment_target = '8.0'
 end
