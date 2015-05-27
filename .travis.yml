@@ -1,5 +1,5 @@
 language: objective-c
-osx_image: xcode61
+osx_image: osx_image: beta-xcode6.3
 # blacklist
 branches:
   except:
