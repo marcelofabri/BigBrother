@@ -8,5 +8,5 @@ before_install:
 - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
 script:
 - set -o pipefail
-- xcodebuild -project BigBrother.xcodeproj -scheme BigBrother test | xcpretty -c
+- xcodebuild -project BigBrother.xcodeproj -scheme BigBrother test -sdk iphonesimulator8.3 | xcpretty -c
 - pod lib lint --quick
