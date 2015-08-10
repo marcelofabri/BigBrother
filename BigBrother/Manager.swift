@@ -54,22 +54,16 @@ public class Manager {
     /**
         Inits a manager.
     
-        :param: application The responsible for owning the network activity indicator. If omitted, defaults to UIApplication.sharedApplication().
+        - parameter application: The responsible for owning the network activity indicator. If omitted, defaults to UIApplication.sharedApplication().
     
-        :returns: An initializated manager
+        - returns: An initializated manager
     */
-    public init(application: NetworkActivityIndicatorOwner = UIApplication.sharedApplication()){
+    public init(application: NetworkActivityIndicatorOwner = UIApplication.sharedApplication()) {
         self.application = application
     }
     
     /// The singleton instance.
-    public class var sharedInstance: Manager {
-        struct Singleton {
-            static let instance = Manager()
-        }
-        
-        return Singleton.instance
-    }
+    public static let sharedInstance = Manager()
     
     /**
         Increments the number of active network requests. If this number was zero before incrementing, this will start animating the status bar network activity indicator.
@@ -116,10 +110,10 @@ public class Manager {
 /**
     Runs a closure in a synchronized way.
 
-    :param: lock    The object to be used to synchronize
-    :param: closure The closure that will be run in a synchronized way
+    - parameter lock:    The object to be used to synchronize
+    - parameter closure: The closure that will be run in a synchronized way
 */
-private func synchronized(lock: AnyObject, @autoclosure closure: () -> ()) {
+private func synchronized(lock: AnyObject, @autoclosure _ closure: () -> ()) {
     objc_sync_enter(lock)
     closure()
     objc_sync_exit(lock)

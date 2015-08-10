@@ -35,7 +35,7 @@ class BigBrotherTests: XCTestCase {
         
         let expectation = expectationWithDescription("GET \(URL)")
         
-        let task = session.dataTaskWithURL(URL) { (data, response, error) in
+        let task = session.dataTaskWithURL(URL) { _ in
             delay(0.2) {
                 expectation.fulfill()
                 XCTAssertFalse(self.mockApplication.networkActivityIndicatorVisible)
@@ -50,7 +50,7 @@ class BigBrotherTests: XCTestCase {
             XCTAssertTrue(self.mockApplication.networkActivityIndicatorVisible)
         }
         
-        waitForExpectationsWithTimeout(task.originalRequest.timeoutInterval + 1) { (error) in
+        waitForExpectationsWithTimeout(task.originalRequest!.timeoutInterval + 1) { _ in
             task.cancel()
         }
     }
