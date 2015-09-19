@@ -71,8 +71,6 @@ BigBrother.Manager.sharedInstance.decrementActivityCount()
 
 ## Installation
 
-**DISCLAIMER: CocoaPods doesn't officially support Swift projects yet. Use the pre-release version at your own discretion.**
-
 BigBrother is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
