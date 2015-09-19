@@ -56,7 +56,7 @@ class BigBrotherTests: XCTestCase {
     }
 
     func testThatNetworkActivityIndicatorTurnsOffIndicatorWhenRequestSucceeds() {
-        let URL =  NSURL(string: "http://httpbin.org/get")!
+        let URL =  NSURL(string: "http://httpbin.org/delay/1")!
         testThatNetworkActivityIndicationTurnsOffWithURL(URL)
     }
     
