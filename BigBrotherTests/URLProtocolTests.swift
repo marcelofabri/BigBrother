@@ -13,11 +13,11 @@ import ObjectiveC
 
 class URLProtocolTests: XCTestCase {
     
-    var swizzledMethods: [(Method, Method)] = []
+    private var swizzledMethods: [(Method, Method)] = []
     
     private func swizzleRegisterClass() {
-        var method: Method = class_getClassMethod(object_getClass(NSURLProtocol), "registerClass:")
-        var swizzledMethod: Method = class_getClassMethod(object_getClass(NSURLProtocol), "bb_registerClass:")
+        let method: Method = class_getClassMethod(object_getClass(NSURLProtocol), "registerClass:")
+        let swizzledMethod: Method = class_getClassMethod(object_getClass(NSURLProtocol), "bb_registerClass:")
         
         method_exchangeImplementations(method, swizzledMethod)
         
@@ -26,8 +26,8 @@ class URLProtocolTests: XCTestCase {
     }
     
     private func swizzleUnregisterClass() {
-        var method: Method = class_getClassMethod(object_getClass(NSURLProtocol), "unregisterClass:")
-        var swizzledMethod: Method = class_getClassMethod(object_getClass(NSURLProtocol), "bb_unregisterClass:")
+        let method: Method = class_getClassMethod(object_getClass(NSURLProtocol), "unregisterClass:")
+        let swizzledMethod: Method = class_getClassMethod(object_getClass(NSURLProtocol), "bb_unregisterClass:")
         
         method_exchangeImplementations(method, swizzledMethod)
         
@@ -66,7 +66,7 @@ class URLProtocolTests: XCTestCase {
         XCTAssertNotNil(configuration.protocolClasses)
         
         let protocols = configuration.protocolClasses!
-        XCTAssertTrue(contains(protocols) { $0 === BigBrother.URLProtocol.self } )
+        XCTAssertTrue(protocols.contains { $0 === BigBrother.URLProtocol.self } )
     }
     
     func testRemoveFromSessionConfiguration() {
@@ -83,7 +83,7 @@ class URLProtocolTests: XCTestCase {
         XCTAssertNotNil(configuration.protocolClasses)
         
         let protocols = configuration.protocolClasses!
-        XCTAssertFalse(contains(protocols) { $0 === BigBrother.URLProtocol.self } )
+        XCTAssertFalse(protocols.contains { $0 === BigBrother.URLProtocol.self } )
     }
     
     func testAddToSharedSession() {
@@ -94,7 +94,7 @@ class URLProtocolTests: XCTestCase {
         let numberOfProtocols = NSURLProtocol.registeredClasses.count
         XCTAssertEqual(numberOfProtocols, previousNumberOfProtocols + 1)
         
-        XCTAssertTrue(contains(NSURLProtocol.registeredClasses) { $0 === BigBrother.URLProtocol.self } )
+        XCTAssertTrue(NSURLProtocol.registeredClasses.contains { $0 === BigBrother.URLProtocol.self } )
     }
     
     func testRemoveFromSharedSession() {
@@ -107,7 +107,7 @@ class URLProtocolTests: XCTestCase {
         let numberOfProtocols = NSURLProtocol.registeredClasses.count
         XCTAssertEqual(numberOfProtocols, previousNumberOfProtocols - 1)
         
-        XCTAssertFalse(contains(NSURLProtocol.registeredClasses) { $0 === BigBrother.URLProtocol.self } )
+        XCTAssertFalse(NSURLProtocol.registeredClasses.contains { $0 === BigBrother.URLProtocol.self } )
     }
 }
 
@@ -117,16 +117,11 @@ extension NSURLProtocol {
     
     class var registeredClasses: NSMutableArray {
         get {
-        var result = objc_getAssociatedObject(self, &registeredClassesKey) as? NSMutableArray
-        if result == nil {
-        result = NSMutableArray()
-        self.registeredClasses = result!
+            return objc_getAssociatedObject(self, &registeredClassesKey) as? NSMutableArray ?? NSMutableArray()
         }
         
-        return result!
-        }
         set(newValue) {
-            objc_setAssociatedObject(self, &registeredClassesKey, newValue, UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
+            objc_setAssociatedObject(self, &registeredClassesKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
     

@@ -19,11 +19,17 @@ public func addToSharedSession() {
 /**
     Adds BigBrother to a NSURLSessionConfiguration that will be used to create a custom NSURLSession.
 
-    :param: configuration The configuration on which BigBrother will be added
+    - parameter configuration: The configuration on which BigBrother will be added
 */
 public func addToSessionConfiguration(configuration: NSURLSessionConfiguration) {
     // needs to be inserted at the beginning (see https://github.com/AliSoftware/OHHTTPStubs/issues/65 )
-    configuration.protocolClasses = [BigBrother.URLProtocol.self] + (configuration.protocolClasses ?? [])
+    let arr: [AnyClass]
+    if let classes = configuration.protocolClasses {
+        arr = [BigBrother.URLProtocol.self] + classes
+    } else {
+        arr = [BigBrother.URLProtocol.self]
+    }
+    configuration.protocolClasses = arr
 }
 
 /**
@@ -37,7 +43,7 @@ public func removeFromSharedSession() {
     Removes BigBrother from a NSURLSessionConfiguration.
     You must create a new NSURLSession from the updated configuration to stop using BigBrother.
 
-    :param: configuration The configuration from which BigBrother will be removed (if present)
+    - parameter configuration: The configuration from which BigBrother will be removed (if present)
 */
 public func removeFromSessionConfiguration(configuration: NSURLSessionConfiguration) {
     configuration.protocolClasses = configuration.protocolClasses?.filter {  $0 !== BigBrother.URLProtocol.self }
@@ -52,19 +58,8 @@ public class URLProtocol: NSURLProtocol {
     var mutableData: NSMutableData?
     var response: NSURLResponse?
     
-    struct Singleton {
-        static var instance = BigBrother.Manager.sharedInstance
-    }
-    
     /// The singleton instance.
-    public class var manager: Manager {
-        get {
-            return Singleton.instance
-        }
-        set {
-            Singleton.instance = newValue
-        }
-    }
+    public static var manager = BigBrother.Manager.sharedInstance
     
     // MARK: NSURLProtocol
     

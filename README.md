@@ -7,6 +7,12 @@
 
 BigBrother is a Swift library made for iOS that automatically watches for any performed request and sets the [network activity indicator](https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/MobileHIG/Controls.html#//apple_ref/doc/uid/TP40006556-CH15-SW44).
 
+This is mostly a proof of concept, having several limitations because of how `NSURLProtocol` works. Some of them are:
+
+- `NSURLProtocol` doesn't inherit `NSURLSession`'s configured headers (see https://github.com/Alamofire/Alamofire/issues/473)
+- `NSURLProtocol` isn't compatible with authentication APIs (see https://github.com/marcelofabri/BigBrother/issues/2)
+
+
 It was inspired by [this comment](https://github.com/Alamofire/Alamofire/issues/185#issuecomment-64955006) by [Mattt Thompson](https://github.com/mattt).
 
 It also was based on [this tutorial](http://www.raywenderlich.com/76735/using-nsurlprotocol-swift) for creating an `NSURLProtocol` and on [`AFNetworkActivityIndicatorManager`](https://github.com/AFNetworking/AFNetworking/blob/master/UIKit%2BAFNetworking/AFNetworkActivityIndicatorManager.h) from [AFNetworking](https://github.com/AFNetworking/AFNetworking).
@@ -69,7 +75,7 @@ BigBrother is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'BigBrother', :git => 'https://github.com/marcelofabri/BigBrother'
+pod 'BigBrother'
 ```	
 
 Then run `pod install` with CocoaPods 0.36 or newer.
