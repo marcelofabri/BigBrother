@@ -75,7 +75,7 @@ BigBrother is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'BigBrother', :git => 'https://github.com/marcelofabri/BigBrother'
+pod 'BigBrother'
 ```	
 
 Then run `pod install` with CocoaPods 0.36 or newer.
