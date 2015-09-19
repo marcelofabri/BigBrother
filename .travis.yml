@@ -6,5 +6,5 @@ branches:
     - auth
 script:
 - set -o pipefail
-- xcodebuild -project BigBrother.xcodeproj -scheme BigBrother test | xcpretty -c
+- xcodebuild -project BigBrother.xcodeproj -scheme BigBrother -sdk iphonesimulator9.0  test | xcpretty -c
 - pod lib lint --quick
