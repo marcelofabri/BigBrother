@@ -97,7 +97,7 @@ public class Manager {
         if !networkActivityIndicatorVisible {
             activityIndicatorVisibilityTimer?.invalidate()
             activityIndicatorVisibilityTimer = NSTimer(timeInterval: invisibilityDelay,
-                target: self, selector: "updateNetworkActivityIndicatorVisibility", userInfo: nil, repeats: false)
+                target: self, selector: #selector(Manager.updateNetworkActivityIndicatorVisibility), userInfo: nil, repeats: false)
             NSRunLoop.mainRunLoop().addTimer(activityIndicatorVisibilityTimer!, forMode: NSRunLoopCommonModes)
         } else {
             dispatch_async(dispatch_get_main_queue()) {
