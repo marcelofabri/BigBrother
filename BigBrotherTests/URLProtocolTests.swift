@@ -16,8 +16,8 @@ class URLProtocolTests: XCTestCase {
     private var swizzledMethods: [(Method, Method)] = []
     
     private func swizzleRegisterClass() {
-        let method: Method = class_getClassMethod(object_getClass(NSURLProtocol), "registerClass:")
-        let swizzledMethod: Method = class_getClassMethod(object_getClass(NSURLProtocol), "bb_registerClass:")
+        let method: Method = class_getClassMethod(object_getClass(NSURLProtocol), #selector(NSURLProtocol.registerClass(_:)))
+        let swizzledMethod: Method = class_getClassMethod(object_getClass(NSURLProtocol), #selector(NSURLProtocol.bb_registerClass(_:)))
         
         method_exchangeImplementations(method, swizzledMethod)
         
@@ -26,8 +26,8 @@ class URLProtocolTests: XCTestCase {
     }
     
     private func swizzleUnregisterClass() {
-        let method: Method = class_getClassMethod(object_getClass(NSURLProtocol), "unregisterClass:")
-        let swizzledMethod: Method = class_getClassMethod(object_getClass(NSURLProtocol), "bb_unregisterClass:")
+        let method: Method = class_getClassMethod(object_getClass(NSURLProtocol), #selector(NSURLProtocol.unregisterClass(_:)))
+        let swizzledMethod: Method = class_getClassMethod(object_getClass(NSURLProtocol), #selector(NSURLProtocol.bb_unregisterClass(_:)))
         
         method_exchangeImplementations(method, swizzledMethod)
         
