@@ -54,9 +54,9 @@ public func removeFromSessionConfiguration(configuration: NSURLSessionConfigurat
 */
 public class URLProtocol: NSURLProtocol {
     
-    var connection: NSURLConnection?
-    var mutableData: NSMutableData?
-    var response: NSURLResponse?
+    public var connection: NSURLConnection?
+    public var mutableData: NSMutableData?
+    public var response: NSURLResponse?
     
     /// The singleton instance.
     public static var manager = BigBrother.Manager.sharedInstance
