@@ -96,7 +96,7 @@ public class URLProtocol: NSURLProtocol {
     
     // MARK: NSURLConnectionDelegate
     
-    func connection(connection: NSURLConnection!, didReceiveResponse response: NSURLResponse!) {
+    internal func connection(connection: NSURLConnection!, didReceiveResponse response: NSURLResponse!) {
         let policy = NSURLCacheStoragePolicy(rawValue: request.cachePolicy.rawValue) ?? .NotAllowed
         client?.URLProtocol(self, didReceiveResponse: response, cacheStoragePolicy: policy)
         
@@ -104,16 +104,16 @@ public class URLProtocol: NSURLProtocol {
         mutableData = NSMutableData()
     }
     
-    func connection(connection: NSURLConnection!, didReceiveData data: NSData!) {
+    internal func connection(connection: NSURLConnection!, didReceiveData data: NSData!) {
         client?.URLProtocol(self, didLoadData: data)
         mutableData?.appendData(data)
     }
     
-    func connectionDidFinishLoading(connection: NSURLConnection!) {
+    internal func connectionDidFinishLoading(connection: NSURLConnection!) {
         client?.URLProtocolDidFinishLoading(self)
     }
     
-    func connection(connection: NSURLConnection!, didFailWithError error: NSError!) {
+    internal func connection(connection: NSURLConnection!, didFailWithError error: NSError!) {
         client?.URLProtocol(self, didFailWithError: error)
     }
 }
