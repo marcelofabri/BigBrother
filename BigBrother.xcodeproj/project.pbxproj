@@ -173,9 +173,11 @@
 				TargetAttributes = {
 					D49921681A5612D800B38954 = {
 						CreatedOnToolsVersion = 6.1.1;
+						LastSwiftMigration = 0800;
 					};
 					D49921731A5612D800B38954 = {
 						CreatedOnToolsVersion = 6.1.1;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -347,6 +349,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Debug;
 		};
@@ -365,6 +368,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_VERSION = 2.3;
 			};
 			name = Release;
 		};
@@ -385,6 +389,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Debug;
 		};
@@ -400,6 +405,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Release;
 		};
