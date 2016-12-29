@@ -94,7 +94,7 @@ class URLProtocolTests: XCTestCase {
         let numberOfProtocols = Foundation.URLProtocol.registeredClasses.count
         XCTAssertEqual(numberOfProtocols, previousNumberOfProtocols + 1)
         
-        XCTAssertTrue(Foundation.URLProtocol.registeredClasses.contains { $0.Type === BigBrother.URLProtocol.self } )
+        XCTAssertTrue((Foundation.URLProtocol.registeredClasses[0] as? BigBrother.URLProtocol.Type) === BigBrother.URLProtocol.self)
     }
     
     func testRemoveFromSharedSession() {
