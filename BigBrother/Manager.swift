@@ -25,29 +25,29 @@ extension UIApplication: NetworkActivityIndicatorOwner {}
    Manages manages the state of the network activity indicator in the status bar.
    Based on AFNetworkActivityIndicatorManager from AFNetworking.
 */
-public class Manager {
-    private var _activityCount: Int = 0
+open class Manager {
+    fileprivate var _activityCount: Int = 0
    
-    private var activityCount: Int {
+    fileprivate var activityCount: Int {
         get {
             return self._activityCount
         }
         set {
             synchronized(self, self._activityCount = newValue)
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 self.updateNetworkActivityIndicatorVisibility()
             }
         }
     }
     
-    private var activityIndicatorVisibilityTimer: NSTimer?
-    private let invisibilityDelay: NSTimeInterval = 0.17
+    fileprivate var activityIndicatorVisibilityTimer: Timer?
+    fileprivate let invisibilityDelay: TimeInterval = 0.17
     
     /// The responsible for owning the network activity indicator. Defaults to UIApplication.sharedApplication().
-    public var application: NetworkActivityIndicatorOwner
+    open var application: NetworkActivityIndicatorOwner
     
     /// Indicates whether the network activity indicator is visible.
-    public var networkActivityIndicatorVisible: Bool {
+    open var networkActivityIndicatorVisible: Bool {
         return activityCount > 0
     }
     
@@ -58,20 +58,20 @@ public class Manager {
     
         - returns: An initializated manager
     */
-    public init(application: NetworkActivityIndicatorOwner = UIApplication.sharedApplication()) {
+    public init(application: NetworkActivityIndicatorOwner = UIApplication.shared) {
         self.application = application
     }
     
     /// The singleton instance.
-    public static let sharedInstance = Manager()
+    open static let sharedInstance = Manager()
     
     /**
         Increments the number of active network requests. If this number was zero before incrementing, this will start animating the status bar network activity indicator.
     */
-    public func incrementActivityCount() {
+    open func incrementActivityCount() {
         synchronized(self, self._activityCount += 1)
         
-        dispatch_async(dispatch_get_main_queue()) {
+        DispatchQueue.main.async {
             self.updateNetworkActivityIndicatorVisibilityDelayed()
         }
     }
@@ -79,28 +79,28 @@ public class Manager {
     /**
         Decrements the number of active network requests. If this number becomes zero after decrementing, this will stop animating the status bar network activity indicator.
     */
-    public func decrementActivityCount() {
+    open func decrementActivityCount() {
         synchronized(self, self._activityCount = max(self._activityCount - 1, 0))
         
-        dispatch_async(dispatch_get_main_queue()) {
+        DispatchQueue.main.async {
             self.updateNetworkActivityIndicatorVisibilityDelayed()
         }
     }
     
     // MARK: Private
     
-    @objc private func updateNetworkActivityIndicatorVisibility() {
+    @objc fileprivate func updateNetworkActivityIndicatorVisibility() {
         application.networkActivityIndicatorVisible = networkActivityIndicatorVisible
     }
     
-    private func updateNetworkActivityIndicatorVisibilityDelayed() {
+    fileprivate func updateNetworkActivityIndicatorVisibilityDelayed() {
         if !networkActivityIndicatorVisible {
             activityIndicatorVisibilityTimer?.invalidate()
-            activityIndicatorVisibilityTimer = NSTimer(timeInterval: invisibilityDelay,
+            activityIndicatorVisibilityTimer = Timer(timeInterval: invisibilityDelay,
                 target: self, selector: #selector(Manager.updateNetworkActivityIndicatorVisibility), userInfo: nil, repeats: false)
-            NSRunLoop.mainRunLoop().addTimer(activityIndicatorVisibilityTimer!, forMode: NSRunLoopCommonModes)
+            RunLoop.main.add(activityIndicatorVisibilityTimer!, forMode: RunLoopMode.commonModes)
         } else {
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 self.updateNetworkActivityIndicatorVisibility()
             }
         }
@@ -113,7 +113,7 @@ public class Manager {
     - parameter lock:    The object to be used to synchronize
     - parameter closure: The closure that will be run in a synchronized way
 */
-private func synchronized(lock: AnyObject, @autoclosure _ closure: () -> ()) {
+private func synchronized(_ lock: AnyObject, _ closure: @autoclosure () -> ()) {
     objc_sync_enter(lock)
     closure()
     objc_sync_exit(lock)

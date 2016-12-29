@@ -13,7 +13,7 @@ import UIKit
     Registers BigBrother to the shared NSURLSession (and to NSURLConnection).
 */
 public func addToSharedSession() {
-    NSURLProtocol.registerClass(BigBrother.URLProtocol.self)
+    Foundation.URLProtocol.registerClass(BigBrother.URLProtocol.self)
 }
 
 /**
@@ -21,7 +21,7 @@ public func addToSharedSession() {
 
     - parameter configuration: The configuration on which BigBrother will be added
 */
-public func addToSessionConfiguration(configuration: NSURLSessionConfiguration) {
+public func addToSessionConfiguration(_ configuration: URLSessionConfiguration) {
     // needs to be inserted at the beginning (see https://github.com/AliSoftware/OHHTTPStubs/issues/65 )
     let arr: [AnyClass]
     if let classes = configuration.protocolClasses {
@@ -36,7 +36,7 @@ public func addToSessionConfiguration(configuration: NSURLSessionConfiguration) 
     Removes BigBrother from the shared NSURLSession (and to NSURLConnection).
 */
 public func removeFromSharedSession() {
-    NSURLProtocol.unregisterClass(BigBrother.URLProtocol.self)
+    Foundation.URLProtocol.unregisterClass(BigBrother.URLProtocol.self)
 }
 
 /**
@@ -45,49 +45,49 @@ public func removeFromSharedSession() {
 
     - parameter configuration: The configuration from which BigBrother will be removed (if present)
 */
-public func removeFromSessionConfiguration(configuration: NSURLSessionConfiguration) {
+public func removeFromSessionConfiguration(_ configuration: URLSessionConfiguration) {
     configuration.protocolClasses = configuration.protocolClasses?.filter {  $0 !== BigBrother.URLProtocol.self }
 }
 
 /**
 *  A custom NSURLProtocol that automatically manages UIApplication.sharedApplication().networkActivityIndicatorVisible.
 */
-public class URLProtocol: NSURLProtocol {
+open class URLProtocol: Foundation.URLProtocol {
     
     var connection: NSURLConnection?
     var mutableData: NSMutableData?
-    var response: NSURLResponse?
+    var response: URLResponse?
     
     /// The singleton instance.
-    public static var manager = BigBrother.Manager.sharedInstance
+    open static var manager = BigBrother.Manager.sharedInstance
     
     // MARK: NSURLProtocol
     
-    override public class func canInitWithRequest(request: NSURLRequest) -> Bool {
-        if NSURLProtocol.propertyForKey(NSStringFromClass(self), inRequest: request) != nil {
+    override open class func canInit(with request: URLRequest) -> Bool {
+        if Foundation.URLProtocol.property(forKey: NSStringFromClass(self), in: request) != nil {
             return false
         }
         
         return true
     }
     
-    override public class func canonicalRequestForRequest(request: NSURLRequest) -> NSURLRequest {
+    override open class func canonicalRequest(for request: URLRequest) -> URLRequest {
         return request
     }
     
-    override public class func requestIsCacheEquivalent(aRequest: NSURLRequest, toRequest bRequest: NSURLRequest) -> Bool {
-        return super.requestIsCacheEquivalent(aRequest, toRequest:bRequest)
+    override open class func requestIsCacheEquivalent(_ aRequest: URLRequest, to bRequest: URLRequest) -> Bool {
+        return super.requestIsCacheEquivalent(aRequest, to:bRequest)
     }
     
-    override public func startLoading() {
+    override open func startLoading() {
         URLProtocol.manager.incrementActivityCount()
         
-        let newRequest = request.mutableCopy() as! NSMutableURLRequest
-        NSURLProtocol.setProperty(true, forKey: NSStringFromClass(self.dynamicType), inRequest: newRequest)
-        connection = NSURLConnection(request: newRequest, delegate: self)
+        let newRequest = (request as NSURLRequest).mutableCopy() as! NSMutableURLRequest
+        Foundation.URLProtocol.setProperty(true, forKey: NSStringFromClass(type(of: self)), in: newRequest)
+        connection = NSURLConnection(request: newRequest as URLRequest, delegate: self)
     }
     
-    override public func stopLoading() {
+    override open func stopLoading() {
         connection?.cancel()
         connection = nil
         
@@ -96,24 +96,24 @@ public class URLProtocol: NSURLProtocol {
     
     // MARK: NSURLConnectionDelegate
     
-    func connection(connection: NSURLConnection!, didReceiveResponse response: NSURLResponse!) {
-        let policy = NSURLCacheStoragePolicy(rawValue: request.cachePolicy.rawValue) ?? .NotAllowed
-        client?.URLProtocol(self, didReceiveResponse: response, cacheStoragePolicy: policy)
+    func connection(_ connection: NSURLConnection!, didReceiveResponse response: URLResponse!) {
+        let policy = URLCache.StoragePolicy(rawValue: request.cachePolicy.rawValue) ?? .notAllowed
+        client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: policy)
         
         self.response = response
         mutableData = NSMutableData()
     }
     
-    func connection(connection: NSURLConnection!, didReceiveData data: NSData!) {
-        client?.URLProtocol(self, didLoadData: data)
-        mutableData?.appendData(data)
+    func connection(_ connection: NSURLConnection!, didReceiveData data: Data!) {
+        client?.urlProtocol(self, didLoad: data)
+        mutableData?.append(data)
     }
     
-    func connectionDidFinishLoading(connection: NSURLConnection!) {
-        client?.URLProtocolDidFinishLoading(self)
+    func connectionDidFinishLoading(_ connection: NSURLConnection!) {
+        client?.urlProtocolDidFinishLoading(self)
     }
     
-    func connection(connection: NSURLConnection!, didFailWithError error: NSError!) {
-        client?.URLProtocol(self, didFailWithError: error)
+    func connection(_ connection: NSURLConnection!, didFailWithError error: NSError!) {
+        client?.urlProtocol(self, didFailWithError: error)
     }
 }
