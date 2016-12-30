@@ -13,11 +13,11 @@ import ObjectiveC
 
 class URLProtocolTests: XCTestCase {
     
-    private var swizzledMethods: [(Method, Method)] = []
+    fileprivate var swizzledMethods: [(Method, Method)] = []
     
-    private func swizzleRegisterClass() {
-        let method: Method = class_getClassMethod(object_getClass(NSURLProtocol), #selector(NSURLProtocol.registerClass(_:)))
-        let swizzledMethod: Method = class_getClassMethod(object_getClass(NSURLProtocol), #selector(NSURLProtocol.bb_registerClass(_:)))
+    fileprivate func swizzleRegisterClass() {
+        let method: Method = class_getClassMethod(object_getClass(Foundation.URLProtocol), #selector(Foundation.URLProtocol.registerClass(_:)))
+        let swizzledMethod: Method = class_getClassMethod(object_getClass(Foundation.URLProtocol), #selector(Foundation.URLProtocol.bb_registerClass(_:)))
         
         method_exchangeImplementations(method, swizzledMethod)
         
@@ -25,9 +25,9 @@ class URLProtocolTests: XCTestCase {
         swizzledMethods.append(tuple)
     }
     
-    private func swizzleUnregisterClass() {
-        let method: Method = class_getClassMethod(object_getClass(NSURLProtocol), #selector(NSURLProtocol.unregisterClass(_:)))
-        let swizzledMethod: Method = class_getClassMethod(object_getClass(NSURLProtocol), #selector(NSURLProtocol.bb_unregisterClass(_:)))
+    fileprivate func swizzleUnregisterClass() {
+        let method: Method = class_getClassMethod(object_getClass(Foundation.URLProtocol), #selector(Foundation.URLProtocol.unregisterClass(_:)))
+        let swizzledMethod: Method = class_getClassMethod(object_getClass(Foundation.URLProtocol), #selector(Foundation.URLProtocol.bb_unregisterClass(_:)))
         
         method_exchangeImplementations(method, swizzledMethod)
         
@@ -48,14 +48,14 @@ class URLProtocolTests: XCTestCase {
         }
         swizzledMethods = []
         
-        NSURLProtocol.unregisterClass(BigBrother.URLProtocol)
-        NSURLProtocol.registeredClasses = NSMutableArray()
+        Foundation.URLProtocol.unregisterClass(BigBrother.URLProtocol)
+        Foundation.URLProtocol.registeredClasses = NSMutableArray()
         
         super.tearDown()
     }
     
     func testAddToSessionConfiguration() {
-        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let configuration = URLSessionConfiguration.default
         let previousNumberOfProtocols = configuration.protocolClasses?.count ?? 0
         
         BigBrother.addToSessionConfiguration(configuration)
@@ -70,7 +70,7 @@ class URLProtocolTests: XCTestCase {
     }
     
     func testRemoveFromSessionConfiguration() {
-        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let configuration = URLSessionConfiguration.default
         BigBrother.addToSessionConfiguration(configuration)
         let previousNumberOfProtocols = configuration.protocolClasses?.count ?? 0
         
@@ -87,33 +87,33 @@ class URLProtocolTests: XCTestCase {
     }
     
     func testAddToSharedSession() {
-        let previousNumberOfProtocols = NSURLProtocol.registeredClasses.count
+        let previousNumberOfProtocols = Foundation.URLProtocol.registeredClasses.count
         
         BigBrother.addToSharedSession()
         
-        let numberOfProtocols = NSURLProtocol.registeredClasses.count
+        let numberOfProtocols = Foundation.URLProtocol.registeredClasses.count
         XCTAssertEqual(numberOfProtocols, previousNumberOfProtocols + 1)
         
-        XCTAssertTrue(NSURLProtocol.registeredClasses.contains { $0 === BigBrother.URLProtocol.self } )
+        XCTAssertTrue((Foundation.URLProtocol.registeredClasses[0] as? BigBrother.URLProtocol.Type) === BigBrother.URLProtocol.self)
     }
     
     func testRemoveFromSharedSession() {
         BigBrother.addToSharedSession()
         
-        let previousNumberOfProtocols = NSURLProtocol.registeredClasses.count
+        let previousNumberOfProtocols = Foundation.URLProtocol.registeredClasses.count
         
         BigBrother.removeFromSharedSession()
         
-        let numberOfProtocols = NSURLProtocol.registeredClasses.count
+        let numberOfProtocols = Foundation.URLProtocol.registeredClasses.count
         XCTAssertEqual(numberOfProtocols, previousNumberOfProtocols - 1)
         
-        XCTAssertFalse(NSURLProtocol.registeredClasses.contains { $0 === BigBrother.URLProtocol.self } )
+        XCTAssertFalse(Foundation.URLProtocol.registeredClasses.contains { $0 === BigBrother.URLProtocol.self } )
     }
 }
 
 private var registeredClassesKey: UInt8 = 0
 
-extension NSURLProtocol {
+extension Foundation.URLProtocol {
     
     class var registeredClasses: NSMutableArray {
         get {
@@ -125,14 +125,14 @@ extension NSURLProtocol {
         }
     }
     
-    class func bb_registerClass(protocolClass: AnyClass) -> Bool {
-        registeredClasses.addObject(protocolClass)
+    class func bb_registerClass(_ protocolClass: AnyClass) -> Bool {
+        registeredClasses.add(protocolClass)
         
         return bb_registerClass(protocolClass)
     }
     
-    class func bb_unregisterClass(protocolClass: AnyClass) {
-        registeredClasses.removeObject(protocolClass)
+    class func bb_unregisterClass(_ protocolClass: AnyClass) {
+        registeredClasses.remove(protocolClass)
         
         bb_unregisterClass(protocolClass)
     }
