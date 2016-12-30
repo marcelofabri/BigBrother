@@ -4,7 +4,12 @@ osx_image: xcode8
 branches:
   except:
     - auth
+env:
+  - IOS_VERSION="10.0" DEVICE_NAME="iPhone 7"
+before_install:
+  - gem install simctl --no-rdoc --no-ri --no-document --quiet
+  - ruby -rsimctl -e 'SimCtl.warmup("$DEVICE_NAME", "iOS $IOS_VERSION", 300)'
 script:
 - set -o pipefail
-- travis_retry xcodebuild -project BigBrother.xcodeproj -scheme BigBrother -sdk iphonesimulator10.0 -destination "platform=iOS Simulator,name=iPhone 7,OS=10.0" test | xcpretty -c
+- travis_retry xcodebuild -project BigBrother.xcodeproj -scheme BigBrother -sdk iphonesimulator10.0 -destination "platform=iOS Simulator,name=$DEVICE_NAME,OS=$IOS_VERSION" test | xcpretty -c
 - pod lib lint --quick
