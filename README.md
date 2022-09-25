@@ -90,14 +90,6 @@ Unit testing is done with `XCTest` and the tests are available under the [BigBro
 - If you **have a feature request**, open an issue.
 - If you **want to contribute**, submit a pull request. They're more than welcome!
 
-## Contact
-
-Marcelo Fabri
-
-- http://www.marcelofabri.com
-- [@marcelofabri_](https://twitter.com/marcelofabri_)
-- me@marcelofabri.com
-
 
 ## License
 
